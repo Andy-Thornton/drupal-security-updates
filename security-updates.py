@@ -10,6 +10,7 @@ drupalbootstrap = sourcetree + "/drupal/includes/bootstrap.inc"
 contrib = sourcetree + "/all/modules/contrib"
 rssDrupalCore = "http://drupal.org/security/rss.xml"
 rssDrupalContrib = "http://drupal.org/security/contrib/rss.xml"
+doAPI = "https://www.drupal.org/api-d7/node.json?type=project_module&field_project_machine_name="
 
 # Start with Drupal core
 print Fore.BLUE + ("=" * 7) + " Drupal Core " + ("=" * 7) + Style.RESET_ALL
