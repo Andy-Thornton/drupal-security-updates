@@ -38,7 +38,7 @@ for module in dirs:
                     moduleversion = line.split("version =")
                     if not "VERSION" in moduleversion[1]:
                         if moduleversion[1] <> "VERSION":
-                            print "-- " + module + " " + moduleversion[1]
+                            print "-- " + module + " " + moduleversion[1].replace('\"','')
     except:
         pass
 print Style.RESET_ALL
@@ -56,7 +56,7 @@ for module in dirs:
                 if """version = """ in line:
                     moduleversion = line.split("version =")
                     if not "VERSION" in moduleversion[1]:
-                        print "-- " + module + " " + moduleversion[1]
+                        print "-- " + module + " " + moduleversion[1].replace('\"','')
     except:
         pass
 print Style.RESET_ALL
