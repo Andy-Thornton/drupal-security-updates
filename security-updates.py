@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import subprocess
+import subprocess, os, sys
 
 # Store paths and connection info
 sourcetree = "/home/flux/Projects/hackday"
@@ -21,5 +21,17 @@ print("=" * 7) + " Contributed Modules " + ("=" * 7)
 
 # Start with the drupal /modules directory as this is where RPM's install
 # Exclude all files with package "Core"
-rpmmodules = sourcetree + "drupal/modules"
-print("--- Scanning " + rpmmodules + " directory for non core modules")
+rpmmodules = sourcetree + "/drupal/modules"
+dirs = os.listdir(rpmmodules)
+for module in dirs:
+    info = sourcetree + "/drupal/modules/" + module + "/" + module + ".info"
+    try:
+        with open(info, 'r') as searchfile:
+            for line in searchfile:
+                if """version = """ in line:
+                    moduleversion = line.split("version =")
+                    if not "VERSION" in moduleversion[1]:
+                        if moduleversion[1] <> "VERSION":
+                            print "-- Module: " + module + " " + moduleversion[1]
+    except:
+        pass
