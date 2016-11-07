@@ -8,6 +8,7 @@ sourcetree = "/home/flux/Projects/hackday"
 gitlabapi = ""
 drupalbootstrap = sourcetree + "/drupal/includes/bootstrap.inc"
 contrib = sourcetree + "/all/modules/contrib"
+rpmmodules = sourcetree + "/drupal/modules"
 rssDrupalCore = "http://drupal.org/security/rss.xml"
 rssDrupalContrib = "http://drupal.org/security/contrib/rss.xml"
 doAPI = "https://www.drupal.org/api-d7/node.json?type=project_module&field_project_machine_name="
@@ -22,42 +23,23 @@ with open(drupalbootstrap, 'r') as searchfile:
             print "-- Drupal Core: " + drupalversion[3]
 print Style.RESET_ALL
 
-# Iterate modules ignoring core.
-print Fore.BLUE + ("=" * 7) + " Contributed Modules under /modules " + ("=" * 7) + Style.RESET_ALL
-
-# Start with the drupal /modules directory as this is where RPM's install
-# TODO: Exclude all files with package "Core"
-rpmmodules = sourcetree + "/drupal/modules"
-dirs = os.listdir(rpmmodules)
-print Fore.GREEN
-for module in dirs:
-    info = sourcetree + "/drupal/modules/" + module + "/" + module + ".info"
-    try:
-        with open(info, 'r') as searchfile:
-            for line in searchfile:
-                if """version = """ in line:
-                    moduleversion = line.split("version =")
-                    if not "VERSION" in moduleversion[1]:
-                        if moduleversion[1] <> "VERSION":
+# Function to iterate through a module path and pull the version numbers
+def modulelist(modpath):
+    print Fore.BLUE + ("=" * 7) + " " + modpath + " " + ("=" * 7) + Style.RESET_ALL
+    dirs = os.listdir(modpath)
+    print Fore.GREEN
+    for module in dirs:
+        info = modpath  + "/" +  module + "/" + module + ".info"
+        try:
+            with open(info, 'r') as searchfile:
+                for line in searchfile:
+                    if """version = """ in line:
+                        moduleversion = line.split("version =")
+                        if not "VERSION" in moduleversion[1]:
                             print "-- " + module + " " + moduleversion[1].replace('\"','')
-    except:
-        pass
-print Style.RESET_ALL
+        except:
+            pass
+    print Style.RESET_ALL
 
-# Now look at the contrib folder
-print Fore.BLUE + ("=" * 7) + " Contributed Modules under /all/modules/contrib "  + ("=" * 7) + Style.RESET_ALL
-rpmmodules = contrib
-dirs = os.listdir(rpmmodules)
-print Fore.GREEN
-for module in dirs:
-    info = contrib  + "/" +  module + "/" + module + ".info"
-    try:
-        with open(info, 'r') as searchfile:
-            for line in searchfile:
-                if """version = """ in line:
-                    moduleversion = line.split("version =")
-                    if not "VERSION" in moduleversion[1]:
-                        print "-- " + module + " " + moduleversion[1].replace('\"','')
-    except:
-        pass
-print Style.RESET_ALL
+modulelist(contrib)
+modulelist(rpmmodules)
